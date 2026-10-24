@@ -1,6 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import * as Blockly from 'blockly'
 import './App.css'
+import magicalNightScene from './assets/rapunzel/magical_night_scene.svg'
+import midnightTowerScene from './assets/rapunzel/midnight_tower_scene.svg'
+import nightSkyWithTower from './assets/rapunzel/night_sky_with_tower.svg'
+import rapunzelHairSheet from './assets/rapunzel/rapunzel_hair_sheet.svg'
+import rapunzelSpriteSheet from './assets/rapunzel/rapunzel_sprite_sheet.svg'
 import {
   type CompiledLevelProgram,
   type ExecutionSnapshot,
@@ -11,6 +16,7 @@ import {
   resetExecution,
   stepExecution,
 } from './gameInterpreter'
+import { getHairSegmentCount, getRapunzelFrameIndex, getRapunzelPose } from './visualState'
 
 const DEFAULT_REPEAT_COUNT = 5
 const STORAGE_REPEAT_KEY = 'ouab.rapunzel.repeatCount'
@@ -193,6 +199,24 @@ function App() {
 
   const hairPercent = Math.min(100, (execution.hairLength / TARGET_HEIGHT_METERS) * 100)
   const climbPercent = Math.min(100, (execution.climbHeight / TARGET_HEIGHT_METERS) * 100)
+  const hairSegmentCount = getHairSegmentCount(execution.hairLength)
+  const activeInstruction =
+    execution.pointer > 0 ? execution.compiled?.instructions[execution.pointer - 1] ?? null : null
+  const pose = getRapunzelPose({
+    instructionType: activeInstruction?.type ?? null,
+    status: execution.status,
+  })
+  const rapunzelFrameIndex = getRapunzelFrameIndex(pose)
+  const hairSegmentIndexes = useMemo(
+    () => Array.from({ length: hairSegmentCount }, (_, index) => index),
+    [hairSegmentCount],
+  )
+  const worldScene =
+    execution.status === 'success'
+      ? magicalNightScene
+      : execution.status === 'failure' || execution.status === 'error'
+        ? midnightTowerScene
+        : nightSkyWithTower
 
   const statusLabel = useMemo(() => {
     if (execution.status === 'success') {
@@ -405,24 +429,42 @@ function App() {
 
       <section className="storybook-book" aria-label="Rapunzel level">
         <article className="page page-world" aria-label="Tower world">
-          <div className="sky" />
-          <div className="cloud cloud-a" />
-          <div className="cloud cloud-b" />
-          <div className="vines" />
+          <img className="world-scene" src={worldScene} alt="" aria-hidden="true" />
 
-          <div className="tower">
-            <div className="window" />
+          <div className="tower-anchor">
             <div
-              className={`hair ${execution.status === 'success' ? 'hair-sparkle' : ''}`}
-              style={{ height: `${hairPercent}%` }}
-            />
+              className={`hair-stack ${execution.status === 'success' ? 'hair-stack-sparkle' : ''}`}
+              style={{ height: `${Math.max(hairPercent, 2)}%` }}
+            >
+              {hairSegmentIndexes.map((index) => (
+                <span
+                  key={index}
+                  className="hair-segment"
+                  style={{
+                    backgroundImage: `url(${rapunzelHairSheet})`,
+                    backgroundPositionX: `${(index % 6) * -24}px`,
+                  }}
+                />
+              ))}
+              {hairSegmentCount > 0 ? (
+                <span className="hair-tip" style={{ backgroundImage: `url(${rapunzelHairSheet})` }} />
+              ) : null}
+              {execution.status === 'success' ? (
+                <span
+                  className="hair-sparkle"
+                  style={{ backgroundImage: `url(${rapunzelHairSheet})` }}
+                />
+              ) : null}
+            </div>
             <div
-              className={`rapunzel ${execution.status === 'success' ? 'rapunzel-escape' : ''}`}
-              style={{ bottom: `${24 + climbPercent * 2.6}px` }}
+              className={`rapunzel rapunzel-${pose}`}
+              style={{
+                backgroundImage: `url(${rapunzelSpriteSheet})`,
+                backgroundPositionX: `${rapunzelFrameIndex * -64}px`,
+                bottom: `${26 + climbPercent * 2.4}px`,
+              } satisfies CSSProperties}
             />
           </div>
-
-          <div className="ground" />
 
           <div className="feedback-panel" role="status" aria-live="polite">
             <strong>{statusLabel}</strong>
