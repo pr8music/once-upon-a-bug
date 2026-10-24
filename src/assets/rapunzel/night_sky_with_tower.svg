@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" shape-rendering="crispEdges">
+  <defs>
+    <pattern id="stars" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#101847"/>
+      <rect x="6" y="5" width="2" height="2" fill="#f7f3c8"/>
+      <rect x="18" y="12" width="2" height="2" fill="#f7f3c8"/>
+      <rect x="10" y="24" width="2" height="2" fill="#a8b4ff"/>
+      <rect x="26" y="20" width="2" height="2" fill="#f7f3c8"/>
+    </pattern>
+  </defs>
+  <rect width="960" height="420" fill="url(#stars)"/>
+  <rect y="420" width="960" height="300" fill="#3a7a46"/>
+  <rect y="480" width="960" height="240" fill="#4f9a55"/>
+  <rect x="742" y="52" width="72" height="72" fill="#e6e8ff"/>
+  <rect x="758" y="68" width="40" height="40" fill="#b8c3ff"/>
+
+  <rect x="326" y="160" width="308" height="470" fill="#51316e"/>
+  <rect x="352" y="160" width="256" height="470" fill="#6f4c96"/>
+  <rect x="326" y="160" width="308" height="20" fill="#8b62b4"/>
+  <rect x="390" y="178" width="180" height="46" fill="#f0b2d4"/>
+  <rect x="406" y="190" width="148" height="24" fill="#3a244b"/>
+  <rect x="438" y="188" width="84" height="28" fill="#ffd28f"/>
+
+  <rect x="118" y="588" width="724" height="34" fill="#2b5f32"/>
+  <rect x="0" y="622" width="960" height="98" fill="#4c9f4f"/>
+  <rect x="30" y="640" width="6" height="6" fill="#f2e6a5"/>
+  <rect x="88" y="654" width="6" height="6" fill="#f5b3dc"/>
+  <rect x="840" y="648" width="6" height="6" fill="#f2e6a5"/>
+  <rect x="900" y="662" width="6" height="6" fill="#f5b3dc"/>
+</svg>

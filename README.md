@@ -42,3 +42,10 @@ npm run lint     # linting
 - **Reset**: resets execution state to the beginning
 
 The currently executing block is highlighted, and the game UI shows current hair length, target, repeat count, and status messages.
+
+## Pixel-art assets
+
+- Integrated Rapunzel level art lives in `/src/assets/rapunzel` as SVG files.
+- The left page swaps between supplied night/tower scenes based on status (running/failed/success).
+- Rapunzel uses the supplied sprite sheet frames (idle, worried, climbing, celebrating).
+- Hair growth is rendered from modular sheet segments in 2m steps, so changing Repeat from 5 to 6 visibly extends hair to 12m.
